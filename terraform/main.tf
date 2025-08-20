@@ -15,6 +15,9 @@ module "alb" {
   app_port   = 3000
 }
 
+module "ecr" {
+  source = "./modules/ecr"
+}
 module "ecs" {
   source                     = "./modules/ecs"
   app_image                   = "YOUR_ECR_IMAGE_URI"
