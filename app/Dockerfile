@@ -8,7 +8,7 @@ COPY app/ .
 # Stage:2 Serve the application
 FROM node:24-alpine
 WORKDIR /opt/NodeJS-App-Deployment/app
-COPY --from=build /app .
+COPY --from=build /opt/NodeJS-App-Deployment/app .
 USER node
 EXPOSE 3000
-CMD [ "node", "app.js" ]
+CMD ["node", "app.js"]
