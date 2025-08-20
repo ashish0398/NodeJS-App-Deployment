@@ -1,9 +1,9 @@
 # Stage:1 Build the application
-FROM node:24-alpine AS build    
+FROM node:24-alpine AS build
 WORKDIR /opt/NodeJS-App-Deployment/app
-COPY package*.json ./
+COPY app/package*.json ./
 RUN npm cache clean --force && npm install
-COPY . .
+COPY app/ .
 
 # Stage:2 Serve the application
 FROM node:24-alpine
