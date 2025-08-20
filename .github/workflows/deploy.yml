@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION: ap-south-1
-  ECR_REPOSITORY: your-ecr-repo
+  ECR_REPOSITORY: nodejs-app
   ECS_CLUSTER: nodejs-cluster
   ECS_SERVICE: nodejs-service
   ECS_TASK_DEFINITION: nodejs-app
