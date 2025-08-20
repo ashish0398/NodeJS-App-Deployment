@@ -1,0 +1,23 @@
+{
+  "name": "package",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/ashish0398/NodeJS-App-Deployment#readme",
+  "bugs": {
+    "url": "https://github.com/ashish0398/NodeJS-App-Deployment/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashish0398/NodeJS-App-Deployment.git"
+  },
+  "license": "ISC",
+  "author": "Ashish Singh",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

@@ -1,0 +1,3 @@
+# Node.js dependencies
+app/node_modules/
+terraform/.terraform
