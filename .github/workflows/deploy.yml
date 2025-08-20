@@ -4,26 +4,50 @@ on:
   push:
     branches: [ main ]
 
+env:
+  AWS_REGION: ap-south-1
+  ECR_REPOSITORY: your-ecr-repo
+  ECS_CLUSTER: nodejs-cluster
+  ECS_SERVICE: nodejs-service
+  ECS_TASK_DEFINITION: nodejs-app
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Build, tag, and push image
+
+      - name: Build, tag, and push image to Amazon ECR
         run: |
-          docker build -t your-ecr-repo/nodejs-app:latest .
-          docker push your-ecr-repo/nodejs-app:latest
-      - name: Deploy to ECS
+          docker build -t ${{ env.ECR_REPOSITORY }}/${{ env.ECS_TASK_DEFINITION }}:latest .
+          docker push ${{ env.ECR_REPOSITORY }}/${{ env.ECS_TASK_DEFINITION }}:latest
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
         run: |
           cd terraform
           terraform init
+
+      - name: Terraform Plan
+        run: |
+          cd terraform
+          terraform plan
+
+      - name: Terraform Apply
+        run: |
+          cd terraform
           terraform apply -auto-approve
