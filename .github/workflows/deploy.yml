@@ -1,5 +1,5 @@
-name: Deploy to ECS
 
+name: Deploy to ECS
 on:
   push:
     branches: [ main ]
@@ -26,14 +26,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Create ECR Repository (if it doesn't exist)
         run: |
           aws ecr describe-repositories --repository-names nodejs-app || \
           aws ecr create-repository --repository-name nodejs-app
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push image to Amazon ECR
         run: |
@@ -48,11 +48,6 @@ jobs:
           cd terraform
           terraform init
 
-      - name: Terraform Destroy
-        run: |
-          cd terraform
-          terraform destroy -auto-approve || true
-
       - name: Terraform Plan
         run: |
           cd terraform
@@ -62,11 +57,3 @@ jobs:
         run: |
           cd terraform
           terraform apply -auto-approve
-
-      - name: Update ECS Service
-        run: |
-          aws ecs update-service \
-            --cluster ${{ env.ECS_CLUSTER }} \
-            --service ${{ env.ECS_SERVICE }} \
-            --force-new-deployment \
-            --region ${{ env.AWS_REGION }}
