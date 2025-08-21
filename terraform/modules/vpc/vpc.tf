@@ -116,7 +116,7 @@ resource "aws_security_group" "vpc_endpoint" {
     protocol        = "tcp"
     from_port       = 443
     to_port         = 443
-    security_groups = [aws_security_group.ecs_tasks.id]
+    security_groups = [var.vpc_cidr]
   }
   egress {
     protocol    = "-1"

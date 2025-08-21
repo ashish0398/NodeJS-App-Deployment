@@ -1,24 +1,34 @@
-variable "app_image" {
-  description = "Docker image URI from ECR"
+variable "private_subnet_ids" {
+  type = list(string)
 }
 
-variable "app_port" {
-  description = "Port the app listens on"
-}
-
-variable "subnet_ids" {
-  description = "List of subnet IDs"
-  type        = list(string)
-}
-
-variable "ecs_sg_id" {
-  description = "Security group ID for ECS"
-}
-
-variable "alb_target_group_arn" {
-  description = "ARN of the ALB target group"
+variable "public_subnet_ids" {
+  type = list(string)
 }
 
 variable "ecs_task_execution_role_arn" {
-  description = "ARN of the ECS task execution role"
+  type = string
+}
+
+variable "ecs_sg_id" {
+  type = string
+}
+
+variable "alb_target_group_arn" {
+  type = string
+}
+
+variable "app_image" {
+  type = string
+}
+
+variable "app_port" {
+  type = number
+  default = 3000
+}
+
+# Toggle: true = private mode (prod), false = public mode (debug)
+variable "use_private_subnets" {
+  type    = bool
+  default = true
 }

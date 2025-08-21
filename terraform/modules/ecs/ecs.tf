@@ -11,7 +11,8 @@ resource "aws_ecs_task_definition" "app" {
   cpu                      = 256
   memory                   = 512
   execution_role_arn       = var.ecs_task_execution_role_arn
-  container_definitions    = jsonencode([{
+
+  container_definitions = jsonencode([{
     name      = "nodejs-app"
     image     = var.app_image
     essential = true
@@ -31,8 +32,12 @@ resource "aws_ecs_service" "main" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = var.subnet_ids
-    security_groups = [var.ecs_sg_id]
+    # Toggle between private or public mode
+    subnets          = var.use_private_subnets ? var.private_subnet_ids : var.public_subnet_ids
+    security_groups  = [var.ecs_sg_id]
+
+    # If using public subnets, allow task to get public IP for internet access
+    assign_public_ip = var.use_private_subnets ? false : true
   }
 
   load_balancer {
