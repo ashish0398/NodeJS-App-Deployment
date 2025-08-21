@@ -91,3 +91,56 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
+
+# VPC Endpoint for ECR API
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id            = aws_vpc.main.id
+  service_name     = "com.amazonaws.ap-south-1.ecr.api"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.vpc_endpoint.id,
+  ]
+
+  subnet_ids          = aws_subnet.private.*.id
+  private_dns_enabled = true
+}
+
+# VPC Endpoint for ECR DKR
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id            = aws_vpc.main.id
+  service_name     = "com.amazonaws.ap-south-1.ecr.dkr"
+  vpc_endpoint_type = "Interface"
+
+  security_group_ids = [
+    aws_security_group.vpc_endpoint.id,
+  ]
+
+  subnet_ids          = aws_subnet.private.*.id
+  private_dns_enabled = true
+}
+
+# Security Group for VPC Endpoints
+resource "aws_security_group" "vpc_endpoint" {
+  name        = "vpc-endpoint-sg"
+  description = "Security group for VPC endpoints"
+  vpc_id      = aws_vpc.main.id
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  tags = {
+    Name = "vpc-endpoint-sg"
+  }
+}

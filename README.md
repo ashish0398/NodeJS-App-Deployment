@@ -15,15 +15,17 @@ This repository contains the solution for the **DevOps Practical Assessment**, f
 ├── app/                  # Node.js application source
 │   ├── app.js
 │   ├── package.json
+|   |── package-lock.json
 │   └── Dockerfile
 ├── terraform/            # Terraform configuration
 │   ├── main.tf
-│   ├── variables.tf
 │   ├── outputs.tf
 │   └── modules/
-│       ├── networking/
-│       ├── ecs/
-│       └── alb/
+│       ├── alb/
+│       ├── ecr/
+│       |── ecs/
+|       |── iam/
+│       └── vpc/
 ├── scripts/               # Linux scripts
 │   └── analyze_logs.sh
 ├── docs/                  # Additional documentation
