@@ -1,4 +1,10 @@
-# DevOps Practical Assessment: AWS ECS Deployment & Security Skills
+# 🚀 Deploy Node.js app to Amazon ECS using GitHub Actions & Terraform
+
+This project demonstrates a **CI/CD pipeline** that builds, pushes, and deploys a **Node.js application** to **Amazon ECS (Elastic Container Service)** using **GitHub Actions** and **Terraform**.
+
+---
+
+## 📂 Project Structure
 
 ## **Overview**
 This repository contains the solution for the **DevOps Practical Assessment**, focusing on:
@@ -22,7 +28,6 @@ This repository contains the solution for the **DevOps Practical Assessment**, f
 │   ├── outputs.tf
 │   └── modules/
 │       ├── alb/
-│       ├── ecr/
 │       |── ecs/
 |       |── iam/
 │       └── vpc/
@@ -35,51 +40,107 @@ This repository contains the solution for the **DevOps Practical Assessment**, f
 
 ---
 
-## **Part 1: Containerizing the Application (Docker)**
+---
 
-### **Dockerfile**
-- Uses a **multi-stage build** to minimize image size.
-- Runs as a **non-root user** (`node`).
-- Installs only **production dependencies**.
-- Excludes unnecessary files via `.dockerignore`.
+## ⚙️ Workflow Overview
 
-### **How to Build and Run Locally**
-1. Navigate to the `app/` directory:
-   ```bash
-   cd app/
+The GitHub Actions workflow is triggered on **push to the `main` branch** and performs the following steps:
 
-2. Build the Docker image:
-    ```bash
-    docker build -t node-app .
+1. **Checkout code** – Fetches the latest code from the repository.
+2. **Configure AWS credentials** – Uses stored secrets to authenticate with AWS.
+3. **Login to Amazon ECR** – Authenticates Docker with Amazon ECR.
+4. **Create ECR repository (if not exists)** – Ensures the `nodejs-app` repo is available.
+5. **Build, Tag & Push Docker Image** – Builds the Docker image and pushes it to ECR.
+6. **Terraform Init/Plan/Apply** – Initializes Terraform, plans changes, and applies them to deploy the ECS service.
 
-3. Run the container:
-    ```bash
-    docker run -p 3000:3000 node-app
+---
 
-4. Test locally Access the app at http://localhost:3000.
+## 🛠️ Environment Variables
 
-## **Part 2: Infrastructure as Code with Terraform (AWS ECS)**
-### **Goal: Deploy the containerized app on AWS ECS using Terraform.**
-#### **Steps:**
-1. Initialize Terraform:
-    Create a modular structure
-    ## **How to Deploy**
-    1. Navigate to the terraform/ directory
-    2. Initialize Terraform:
-    3. Review the plan:
-    4. Apply the configuration:
-    5. Access the app via the ALB DNS name (output after deployment).
+The following environment variables are set in the workflow:
 
-2. Networking (VPC, Subnets, Security Groups):
-    Use the AWS VPC module for best practices.
-    Create public/private subnets, NAT gateway, and security groups:
-        ALB SG: Allow HTTP/HTTPS (80/443) from the internet.
-        ECS SG: Allow traffic only from the ALB on port 3000.
+| Variable              | Description |
+|-----------------------|-------------|
+| `AWS_REGION`          | AWS region where resources are deployed (default: `ap-south-1`) |
+| `ECR_REPOSITORY`      | Amazon ECR repository URI |
+| `ECS_CLUSTER`         | ECS cluster name |
+| `ECS_SERVICE`         | ECS service name |
+| `ECS_TASK_DEFINITION` | ECS task definition family |
+| `IMAGE_TAG`           | Docker image tag (default: `latest`) |
 
-3. ECS Cluster & Task Definition:
-    Create an ECS cluster.
-    Define a task with:
-        Container image from ECR.
-        Port mapping (3000).
-        Environment variables (e.g., `NODE_ENV=production`).
+---
 
+## 🔑 GitHub Secrets Required
+
+Set the following secrets in your GitHub repository:
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+
+---
+
+## 🚀 Deployment Process
+
+1. Push changes to the **`main` branch**.
+2. GitHub Actions will:
+   - Build & push a new Docker image to **Amazon ECR**.
+   - Run **Terraform** to create/update ECS infrastructure.
+   - Deploy the latest application to **Amazon ECS**.
+
+---
+
+## 📦 Prerequisites
+
+- AWS Account with permissions for **ECR, ECS, IAM, and VPC**.
+- Terraform installed locally (for manual runs).
+- GitHub repository with Actions enabled.
+
+---
+
+## 🏗️ Terraform Setup Guide
+
+The `terraform/` folder provisions the required AWS infrastructure for ECS deployment.
+
+### 1. VPC & Networking
+- Creates a **VPC**, **subnets** (public/private), and **Internet Gateway**.
+- Configures **Security Groups** for ECS tasks and Load Balancer.
+
+### 2. ECS Cluster
+- Provisions an **ECS cluster** (`nodejs-cluster`) in the specified region.
+- Configured to run **Fargate** tasks (serverless container execution).
+
+### 3. Task Definition
+- Defines an **ECS Task Definition** (`nodejs-app`) that references the Docker image in ECR.
+- Configures:
+  - Container name
+  - CPU & memory resources
+  - Port mappings (e.g., `80:3000`)
+
+### 4. ECS Service
+- Deploys the ECS service (`nodejs-service`) into the cluster.
+- Configured to run tasks using Fargate.
+- Optionally integrates with an **Application Load Balancer (ALB)** for public access.
+
+### 5. Outputs
+After `terraform apply`, you’ll typically see outputs such as:
+- **Service URL** (if ALB configured)
+- **ECS Cluster & Service names**
+- **ECR Repository URI**
+
+---
+
+## 🔍 Verification
+
+After deployment:
+
+- Check the ECS service in the **AWS Management Console**.
+- Verify that the ECS task is running the latest Docker image.
+- Access the application via the ECS Service Load Balancer or Public IP (if configured in Terraform).
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
