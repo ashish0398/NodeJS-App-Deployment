@@ -147,8 +147,4 @@ resource "aws_security_group" "vpc_endpoint" {
     to_port     = 443
     cidr_blocks = [aws_vpc.main.cidr_block]
   }
-
-  tags = {
-    Name = "vpc-endpoint-sg"
-  }
 }

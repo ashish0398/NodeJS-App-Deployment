@@ -30,11 +30,6 @@ resource "aws_ecs_task_definition" "app" {
   }])
 }
 
-# CloudWatch Log Group for ECS
-resource "aws_cloudwatch_log_group" "nodejs_app" {
-  name = "/ecs/nodejs-app"
-}
-
 # ECS Service
 resource "aws_ecs_service" "main" {
   name            = "nodejs-service"
