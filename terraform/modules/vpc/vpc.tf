@@ -14,7 +14,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "private" {
   count             = 2
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.${count.index + 1}.0/24"
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index)
   availability_zone = "${var.aws_region}${element(["a", "b"], count.index)}"
 }
 
