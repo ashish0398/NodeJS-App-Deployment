@@ -1,6 +1,6 @@
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
-  default     = "192.168.0.0/16"
+  default     = "172.16.0.0/12"
 }
 
 variable "app_port" {
