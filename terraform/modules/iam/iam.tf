@@ -17,7 +17,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-
 # Additional policy for ECR access
 resource "aws_iam_policy" "ecr_access_policy" {
   name        = "ecr-access-policy"
@@ -42,6 +41,6 @@ resource "aws_iam_policy" "ecr_access_policy" {
 
 # Attach the ECR access policy to the role
 resource "aws_iam_role_policy_attachment" "ecr_access_policy_attachment" {
-  role       = aws_iam_role.ecs_task_execution_role.name
+  role       = aws_iam_role.ecs_task_execution.name
   policy_arn = aws_iam_policy.ecr_access_policy.arn
 }
