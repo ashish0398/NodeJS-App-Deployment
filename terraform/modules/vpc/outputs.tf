@@ -19,7 +19,7 @@ output "ecs_sg_id" {
 }
 
 output "private_subnet_ids" {
-  value = aws_subnet.private.id
+  value = aws_subnet.private.*.id
 }
 
 output "ecs_tasks_security_group_id" {
