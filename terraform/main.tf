@@ -15,9 +15,6 @@ module "alb" {
   app_port   = 3000
 }
 
-module "ecr" {
-  source = "./modules/ecr"
-}
 module "ecs" {
   source                     = "./modules/ecs"
   app_image                   = "992382713153.dkr.ecr.ap-south-1.amazonaws.com/nodejs-app:latest"
