@@ -53,7 +53,7 @@ resource "aws_security_group" "alb" {
 }
 
 # Created security group for ECS tasks
-resource "aws_security_group" "ecs" {
+resource "aws_security_group" "ecs_tasks" {
   name        = "ecs-sg"
   description = "Allow traffic from ALB"
   vpc_id      = aws_vpc.main.id
