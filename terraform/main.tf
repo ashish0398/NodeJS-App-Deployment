@@ -20,7 +20,7 @@ module "ecr" {
 }
 module "ecs" {
   source                     = "./modules/ecs"
-  app_image                   = "YOUR_ECR_IMAGE_URI"
+  app_image                   = "992382713153.dkr.ecr.ap-south-1.amazonaws.com/nodejs-app:latest"
   app_port                   = 3000
   subnet_ids                 = module.vpc.public_subnet_ids
   ecs_sg_id                  = module.vpc.ecs_sg_id
