@@ -139,7 +139,67 @@ After deployment:
 
 ---
 
-## 📜 License
+## **📜 Linux System Administration Scripts**
+
+1. **SSH Hardening**: Secure SSH access by disabling password authentication and root login.
+2. **Web Service Debugging**: Diagnose and fix issues with Apache/Nginx not starting on EC2.
+3. **Log Analysis & Disk Usage**: Parse application logs for errors and check disk usage thresholds.
+
+---
+
+## **1. SSH Hardening Script**
+**Script:** [`ssh-hardening.sh`](scripts/ssh-hardening.sh)
+
+### **Purpose**
+Automates the process of securing SSH access by:
+- Disabling password authentication (enforcing key-based auth).
+- Disabling root login via SSH.
+- Restarting the SSH service to apply changes.
+
+### **Prerequisites**
+- Run as root or with sudo.
+- Ensure key-based authentication is set up for at least one non-root user before running this script.
+
+### **Notes**
+- A backup of the original sshd_config is created at /etc/ssh/sshd_config.bak.
+- Test SSH access before closing your current session to avoid lockout.
+
+## **2. Web Service Debugging Script**
+**Script:** [`web_service-debugging.sh`](scripts/web_service-debugging.sh)
+
+### **Purpose**
+Diagnoses and attempts to fix issues with Apache or Nginx not starting on an EC2 instance. It:
+- Checks the service status.
+- Displays relevant logs.
+- Tests the configuration for syntax errors.
+- Checks port availability.
+- Attempts to restart the service.
+
+### **Prerequisites**
+- Run as root or with sudo.
+- Specify the service name (apache2 or nginx) as an argument.
+
+### **Notes**
+- If the configuration test fails, fix the syntax error in the config file and rerun the script.
+- If the port is in use, stop the conflicting service or reconfigure the web service.
+
+## **3. Log Analysis & Disk Usage Script**
+**Script:** [`log-analysis.sh`](scripts/log-analysis.sh)
+
+### **Purpose**
+- Parses a log file for error occurrences.
+- Checks disk usage and alerts if it exceeds a specified threshold.
+
+### **Prerequisites**
+The script must be executable:
+  - chmod +x analysis.sh
+- The log file must exist and be readable.
+
+### **Notes**
+- The script outputs the number of errors found in the log file.
+- If disk usage exceeds the threshold, it prints a warning.
+
+## 🪪 License
 
 This project is licensed under the **MIT License**.
 
