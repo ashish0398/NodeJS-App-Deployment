@@ -19,14 +19,6 @@ resource "aws_ecs_task_definition" "app" {
       containerPort = var.app_port
       hostPort      = var.app_port
     }]
-    logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        "awslogs-group"         = aws_cloudwatch_log_group.nodejs_app.name
-        "awslogs-region"        = "ap-south-1"
-        "awslogs-stream-prefix" = "ecs"
-      }
-    }
   }])
 }
 
