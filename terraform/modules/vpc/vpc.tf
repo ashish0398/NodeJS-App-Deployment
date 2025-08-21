@@ -113,11 +113,12 @@ resource "aws_security_group" "vpc_endpoint" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    protocol        = "tcp"
-    from_port       = 443
-    to_port         = 443
-    security_groups = [var.vpc_cidr]
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = [var.vpc_cidr]
   }
+
   egress {
     protocol    = "-1"
     from_port   = 0
