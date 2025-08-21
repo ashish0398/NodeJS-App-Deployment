@@ -12,7 +12,7 @@ resource "aws_vpc" "main" {
 
 # Create Private Subnets
 resource "aws_subnet" "private" {
-  count             = 1
+  count             = 2
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.${count.index + 1}.0/24"
   availability_zone = "${var.aws_region}${element(["a", "b"], count.index)}"
@@ -20,9 +20,9 @@ resource "aws_subnet" "private" {
 
 # Created public subnet.
 resource "aws_subnet" "public" {
-  count             = 1
+  count             = 2
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.${count.index + 1}.0/24"
+  cidr_block        = "10.0.${count.index + 3}.0/24"
   availability_zone = data.aws_availability_zones.available.names[count.index]
 }
 
