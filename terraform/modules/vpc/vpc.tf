@@ -10,6 +10,14 @@ resource "aws_vpc" "main" {
   tags = { Name = "ecs-vpc" }
 }
 
+# Create Private Subnets
+resource "aws_subnet" "private" {
+  count             = 2
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.${count.index + 1}.0/24"
+  availability_zone = "${var.aws_region}${element(["a", "b"], count.index)}"
+}
+
 # Created public subnet.
 resource "aws_subnet" "public" {
   count             = 2
